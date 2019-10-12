@@ -1,18 +1,25 @@
 import React from "react"
+import {connect} from 'react-redux'  //引入连接器
+import store from "@/redux/store"
 import { Form, Icon, Input, Button, Checkbox, Divider } from 'antd';
 import "./login.css"
 
 class Login extends React.Component {
     constructor(props) {
         super(props);
-        this.state={};
+        this.state = store.getState();
+        store.subscribe(this.storeChange) //订阅Redux的状态
+    }
+
+    storeChange = () => {
+      this.setState(store.getState())
     }
 
     handleSubmit = e => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
           if (!err) {
-            console.log('Received values of form: ', values);
+            this.props.login_submit(values)
           }
         });
     };
@@ -66,5 +73,29 @@ class Login extends React.Component {
     }
 }
 
+//将store内的属性一一对应到本组件的state中
+// store_value -> state_value
+const stateToProps = (state)=>{
+  return {
+    user_name : state.user_name,
+    user_passwd : state.user_passwd,
+    login : state.login
+  }
+}
 
-export default Form.create({})(Login);
+const dispatchToProps = (dispatch) => {
+  return {
+    login_submit(values) {
+      let action = {
+          type : 'commit_login_form',
+          user_name : values.username,
+          user_passwd : values.password
+      }
+      dispatch(action)
+    }
+  }
+}
+
+
+const form_before_connect = Form.create({})(Login)
+export default connect(stateToProps, dispatchToProps)(form_before_connect)
