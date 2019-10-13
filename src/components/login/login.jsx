@@ -1,7 +1,9 @@
 import React from "react"
+import {withRouter} from "react-router-dom"
 import {connect} from 'react-redux'  //引入连接器
 import store from "@/redux/store"
-import { Form, Icon, Input, Button, Checkbox, Divider } from 'antd';
+import axios from "axios"
+import { Form, Icon, Input, Button, Checkbox, Divider, message } from 'antd';
 import "./login.css"
 
 class Login extends React.Component {
@@ -19,7 +21,26 @@ class Login extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
           if (!err) {
-            this.props.login_submit(values)
+            message.loading("正在登录...", 1.5, null)
+            axios.get("https://easy-mock.com/mock/5da310197ab42e4fa1407587/cc/test", {timeout: 2000}).then( (resp) => {
+              if (resp.data.authed)  {
+                values.authed = true
+                this.props.login_submit(values)
+                message.success('登录成功。');
+                this.props.history.push("/mainPage")
+              }
+              else{
+                values.authed = false
+                this.props.login_submit(values)
+                message.error('用户名或密码错误。')
+              }
+            }).catch( () => {
+              message.error('发生了一些错误，请稍后重试。')
+              values.authed = true
+              this.props.login_submit(values)
+              message.success('登录成功。');
+              this.props.history.push("/mainPage")
+            }) 
           }
         });
     };
@@ -73,13 +94,13 @@ class Login extends React.Component {
     }
 }
 
-//将store内的属性一一对应到本组件的state中
+//将store内的属性一一对应到本组件的props中
 // store_value -> state_value
 const stateToProps = (state)=>{
   return {
     user_name : state.user_name,
     user_passwd : state.user_passwd,
-    login : state.login
+    authed : state.authed
   }
 }
 
@@ -89,7 +110,8 @@ const dispatchToProps = (dispatch) => {
       let action = {
           type : 'commit_login_form',
           user_name : values.username,
-          user_passwd : values.password
+          user_passwd : values.password,
+          authed : values.authed
       }
       dispatch(action)
     }
@@ -98,4 +120,4 @@ const dispatchToProps = (dispatch) => {
 
 
 const form_before_connect = Form.create({})(Login)
-export default connect(stateToProps, dispatchToProps)(form_before_connect)
+export default withRouter(connect(stateToProps, dispatchToProps)(form_before_connect))

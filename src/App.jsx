@@ -1,24 +1,27 @@
 import React from 'react';
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { Provider } from 'react-redux'
 import store from '@/redux/store'
-import Login from "@/components/login/login"
+import routeList from "@/router/routeList"
+import renderRoute from "@/router/routeGen"
 
 class App extends React.Component {
     constructor(props) {
         super(props);
-        this.state={};
+        this.state = store.getState();
+        store.subscribe(this.storeChange) //订阅Redux的状态
     }
 
-    click_button = () => {
-        console.log("clicked")
+    storeChange = () => {
+        this.setState(store.getState())
     }
-
 
     render() {
         return (
             <Provider store={store}>
-                <Login></Login>
+                <BrowserRouter>
+                    { renderRoute(routeList, this.state.authed) }
+                </BrowserRouter>
             </Provider>
         );
     }
