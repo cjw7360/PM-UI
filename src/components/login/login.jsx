@@ -3,6 +3,7 @@ import {withRouter} from "react-router-dom"
 import {connect} from 'react-redux'  //引入连接器
 import axios from "axios"
 import { Form, Icon, Input, Button, Checkbox, Divider, message } from 'antd';
+import action_type from "@/redux/actionTypes"
 import "./login.css"
 
 const Login = (props) => {
@@ -78,8 +79,7 @@ const Login = (props) => {
           </Form.Item>
       </Form>
     </div>
-  );
-    
+  );  
 }
 
 //将store内的属性一一对应到本组件的props中
@@ -96,7 +96,7 @@ const dispatchToProps = (dispatch) => {
   return {
     login_submit(values) {
       let action = {
-          type : 'commit_login_form',
+          type : action_type.login,
           user_name : values.username,
           user_passwd : values.password,
           authed : values.authed
