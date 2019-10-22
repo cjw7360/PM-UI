@@ -7,7 +7,6 @@ import renderRoute from "@/router/routeGen"
 const Container = (props) => {
     return (
         <BrowserRouter>
-        {console.log("ccccccc=", props.authed)}
                     { renderRoute(routeList, props.authed) }
         </BrowserRouter>
     )

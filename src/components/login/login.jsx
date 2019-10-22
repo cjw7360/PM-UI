@@ -6,14 +6,17 @@ import { Form, Icon, Input, Button, Checkbox, Divider, message } from 'antd';
 import action_type from "@/redux/actionTypes"
 import "./login.css"
 
+var isButtonClickable = true
+
 const Login = (props) => {
 
     const handleSubmit = e => {
         e.preventDefault();
         props.form.validateFields((err, values) => {
           if (!err) {
+            isButtonClickable = false
             message.loading("正在登录...", 1.5, null)
-            axios.get("https://easy-mock.com/mock/5da310197ab42e4fa1407587/cc/test", {timeout: 2000}).then( (resp) => {
+            axios.post("http://easymock.pureff.cn:4000/mock/5daeb6196f5c130020f4f011/clemon/login", {"username":values.username, "passwd":values.password}, {timeout: 2000}).then( (resp) => {
               if (resp.data.authed)  {
                 values.authed = true
                 props.login_submit(values)
@@ -21,16 +24,18 @@ const Login = (props) => {
                 props.history.push("/mainPage")
               }
               else{
+                isButtonClickable = true
                 values.authed = false
                 props.login_submit(values)
                 message.error('用户名或密码错误。')
               }
             }).catch( () => {
               message.error('发生了一些错误，请稍后重试。')
-              values.authed = true
-              props.login_submit(values)
-              message.success('登录成功。');
-              props.history.push("/mainPage")
+              isButtonClickable = true
+              // values.authed = true
+              // props.login_submit(values)
+              // message.success('登录成功。');
+              // props.history.push("/mainPage")
             }) 
           }
         });
@@ -73,7 +78,7 @@ const Login = (props) => {
             <a className="login-form-forgot" href="">
               Forgot password
             </a>
-            <Button type="primary" htmlType="submit" className="login-form-button">
+            <Button type="primary" htmlType="submit" disabled={!isButtonClickable} className="login-form-button">
               <div className="login-button-text">登录</div>
             </Button>
           </Form.Item>

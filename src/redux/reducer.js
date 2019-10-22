@@ -4,7 +4,7 @@ const defaultState = {
     user_name : "none",
     user_passwd : "none",
     authed : false,
-    num : 0
+    collapsed: false
 }
 
 const deep_copy = (value) => {
@@ -20,9 +20,9 @@ export default (state = defaultState, action) => {
         newState.authed = action.authed
         return newState
     }
-    if (action.type === action_type.add) {
+    if (action.type === action_type.set_collapsed) {
         let newState = deep_copy(state)
-        newState.num += action.num
+        newState.collapsed = action.value
         return newState
     }
 
