@@ -2,6 +2,7 @@ import React from "react"
 import {withRouter} from "react-router-dom"
 import {connect} from 'react-redux'  //引入连接器
 import axios from "axios"
+import qs from "qs"
 import { Form, Icon, Input, Button, Checkbox, Divider, message } from 'antd';
 import action_type from "@/redux/actionTypes"
 import "./login.css"
@@ -16,18 +17,29 @@ const Login = (props) => {
           if (!err) {
             isButtonClickable = false
             message.loading("正在登录...", 1.5, null)
-            axios.post("http://easymock.pureff.cn:4000/mock/5daeb6196f5c130020f4f011/clemon/login", {"username":values.username, "passwd":values.password}, {timeout: 2000}).then( (resp) => {
+            let url = "http://easymock.pureff.cn:4000/mock/5dfb8cbbd08c5d00174b63e7/pm/check_login"
+            let params = {"username":values.username, "passwd":values.password}
+            axios({
+              headers: {'Content-Type':'application/x-www-form-urlencoded'},
+              // headers: {'Content-Type':'application/json'},
+              method: 'post',
+              url: url,
+              data: qs.stringify(params),
+              // data: params,
+              timeout: 2000
+            }).then( (resp) => {
               if (resp.data.authed)  {
                 values.authed = true
                 props.login_submit(values)
-                message.success('登录成功。');
+                message.success('登录成功。')
                 props.history.push("/mainPage")
               }
               else{
+                console.log(resp.data)
                 isButtonClickable = true
                 values.authed = false
                 props.login_submit(values)
-                message.error('用户名或密码错误。')
+                message.error('用户名或密码错误。') 
               }
             }).catch( () => {
               message.error('发生了一些错误，请稍后重试。')

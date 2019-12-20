@@ -15,31 +15,18 @@ const MainPage = (props) => {
                 width="30vw"
                 collapsedWidth="10.7vw" >
                 <div className="logo" />
-                <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" inlineCollapsed={props.collapsed}>
+                <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
                     <Menu.Item key="1">
                         <Icon type="pie-chart" />
-                        <span>Option 1</span>
+                        <span>录入</span>
                     </Menu.Item>
                     <Menu.Item key="2">
                         <Icon type="desktop" />
-                        <span>Option 2</span>
+                        <span>查看</span>
                     </Menu.Item>
-                    <SubMenu
-                        key="sub1"
-                        title={
-                        <span>
-                            <Icon type="user" />
-                            <span>User</span>
-                        </span>
-                        }
-                    >
-                        <Menu.Item key="3">Tom</Menu.Item>
-                        <Menu.Item key="4">Bill</Menu.Item>
-                        <Menu.Item key="5">Alex</Menu.Item>
-                    </SubMenu>
                     <Menu.Item key="6">
                         <Icon type="file" />
-                        <span>File</span>
+                        <span>导出</span>
                     </Menu.Item>
                 </Menu>
             </Sider>
