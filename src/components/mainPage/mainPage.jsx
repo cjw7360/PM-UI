@@ -1,11 +1,15 @@
 import React from "react"
 import {connect} from 'react-redux'  //引入连接器
+import {  Route, Link  } from "react-router-dom";
 import action_type from "@/redux/actionTypes"
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
 import "./mainPage.css"
 
+import SubPageEnter from "@/components/subPageEnter/subPageEnter"
+import SubPageCheck from "@/components/subPageCheck/subPageCheck"
+import SubPageExport from "@/components/subPageExport/subPageExport"
+
 const { Header, Content, Footer, Sider } = Layout;
-const { SubMenu } = Menu;
 
 const MainPage = (props) => {
     
@@ -17,27 +21,31 @@ const MainPage = (props) => {
                 <div className="logo" />
                 <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
                     <Menu.Item key="1">
-                        <Icon type="pie-chart" />
-                        <span>录入</span>
+                        <Link to="/mainPage/subPageEnter">
+                            <Icon type="pie-chart" /><span>录入</span>
+                        </Link>
                     </Menu.Item>
                     <Menu.Item key="2">
-                        <Icon type="desktop" />
-                        <span>查看</span>
+                        <Link to="/mainPage/subPageCheck">
+                            <Icon type="desktop" /><span>查看</span>
+                        </Link>
                     </Menu.Item>
                     <Menu.Item key="6">
-                        <Icon type="file" />
-                        <span>导出</span>
+                        <Link to="/mainPage/subPageExport">
+                            <Icon type="file" /><span>导出</span>
+                        </Link>
                     </Menu.Item>
                 </Menu>
             </Sider>
             <Layout>
                 <Header />
                 <Content style={{ margin: '0 16px' }}>
-                    <Breadcrumb style={{ margin: '16px 0' }}>
-                    <Breadcrumb.Item>User</Breadcrumb.Item>
-                    <Breadcrumb.Item>Bill</Breadcrumb.Item>
-                    </Breadcrumb>
-                    <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>Bill is a cat.</div>
+                    <div style={{ margin: '16px 0' }} />
+                    <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
+                        <Route exact path="/mainPage/subPageEnter"   component={SubPageEnter} />
+                        <Route exact path="/mainPage/subPageCheck"   component={SubPageCheck} />
+                        <Route exact path="/mainPage/subPageExport"   component={SubPageExport} />
+                    </div>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
             </Layout>

@@ -16,7 +16,7 @@ const list = [
     },
     {
         path : "/mainPage",
-        exact: true,
+        exact: false,
         component: MainPage,
         requiresAuth : true
     }
