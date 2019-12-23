@@ -4,7 +4,12 @@ const defaultState = {
     user_name : "none",
     user_passwd : "none",
     authed : false,
-    collapsed: false
+    collapsed: false,
+    enterNewItem: {
+        visible: false,
+        factorName: "none",
+        totalAmount: 0
+    },
 }
 
 const deep_copy = (value) => {
@@ -23,6 +28,12 @@ export default (state = defaultState, action) => {
     if (action.type === action_type.set_collapsed) {
         let newState = deep_copy(state)
         newState.collapsed = action.value
+        return newState
+    }
+    if (action.type === action_type.updateNewItemVisible) {
+
+        let newState = deep_copy(state)
+        newState.enterNewItem.visible = !newState.enterNewItem.visible
         return newState
     }
 
